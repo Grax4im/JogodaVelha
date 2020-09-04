@@ -1,5 +1,4 @@
 const msg = document.querySelector('.msg--status');
-msg.textContent = 'Jogador X';
 let matriz = ['','','','','','','','',''];
 const conditions = [
     ['0','1','2'],
@@ -13,7 +12,8 @@ const conditions = [
 ]
 let isActive = true;
 let jogadorAtual = 'X';
-let win = false;
+msg.textContent = 'Jogador X';
+
 function cliqueCelula(cell) {
     const celula = cell.target;
     const numeroCelula = celula.classList.value;
@@ -28,6 +28,7 @@ function mudaMatriz(celula, numeroCelula) {
     matriz[numeroCelula] = jogadorAtual;
 }
 function verificaVitoria() {
+    let win = false;
     let a,b,c = 0;
     for(let i = 0; i < 8; i++) {
         a = conditions[i][0];
@@ -54,16 +55,19 @@ function verificaVitoria() {
     }
     mudaJogador();
 }
+
 function mudaJogador() {
     jogadorAtual = jogadorAtual==='X'?'O':'X';
     msg.textContent = `Jogador ${jogadorAtual}`;
 }
+
 function limpaTela() {
-    matriz = ['','','','','','','','',''];
+    matriz.fill('');
     document.querySelectorAll('.row div').forEach((cell) => cell.innerHTML = '');
     msg.textContent = 'Jogador X';
     jogadorAtual = 'X';
     isActive = true;
 }
+
 document.querySelectorAll('.row div').forEach((cell) => cell.addEventListener('click', (element) => cliqueCelula(element)));
 document.querySelector('button').addEventListener('click', () => limpaTela());
