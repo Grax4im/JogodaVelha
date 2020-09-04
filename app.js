@@ -1,4 +1,16 @@
+const msg = document.querySelector('.msg--status');
+msg.textContent = 'Jogador X';
 let matriz = ['','','','','','','','',''];
+const conditions = [
+    ['0','1','2'],
+    ['3','4','5'],
+    ['6','7','8'],
+    ['0','3','6'],
+    ['1','4','7'],
+    ['2','5','8'],
+    ['0','4','8'],
+    ['2','4','6']
+]
 let isActive = true;
 let jogadorAtual = 'X';
 let win = false;
@@ -12,25 +24,15 @@ function cliqueCelula(cell) {
     }
 }
 function mudaMatriz(celula, numeroCelula) {
-    celula.innerHTML = jogadorAtual;
+    celula.innerHTML = `<p>${jogadorAtual}</p>`;
     matriz[numeroCelula] = jogadorAtual;
 }
 function verificaVitoria() {
-    const conditions = [
-        ['0','1','2'],
-        ['3','4','5'],
-        ['6','7','8'],
-        ['0','3','6'],
-        ['1','4','7'],
-        ['2','5','8'],
-        ['0','4','8'],
-        ['2','4','6']
-    ]
-
-    for(let i = 0; i < 9; i++) {
-        let a = conditions[i][0];
-        let b = conditions[i][1];
-        let c = conditions[i][2];
+    let a,b,c = 0;
+    for(let i = 0; i < 8; i++) {
+        a = conditions[i][0];
+        b = conditions[i][1];
+        c = conditions[i][2];
 
         if(matriz[a] === '' || matriz[b] === '' || matriz[c] === '') {
             continue;
@@ -42,15 +44,26 @@ function verificaVitoria() {
     }
     if(win) {
         isActive = false;
-        //COLOCA MENSAGEM QUE O JOGADOR ATUAL GANHOU
+        msg.textContent = `Parabens! Jogador ${jogadorAtual} venceu`;
         return;
     }
-    if(!(matriz.contain(''))) {
+    if(!(matriz.includes(''))) {
         isActive = false;
-        //COLOCA MENSAGEM QUE DEU VELHA
+        msg.textContent = `Deu Velha`;
         return;
     }
     mudaJogador();
 }
-
+function mudaJogador() {
+    jogadorAtual = jogadorAtual==='X'?'O':'X';
+    msg.textContent = `Jogador ${jogadorAtual}`;
+}
+function limpaTela() {
+    matriz = ['','','','','','','','',''];
+    document.querySelectorAll('.row div').forEach((cell) => cell.innerHTML = '');
+    msg.textContent = 'Jogador X';
+    jogadorAtual = 'X';
+    isActive = true;
+}
 document.querySelectorAll('.row div').forEach((cell) => cell.addEventListener('click', (element) => cliqueCelula(element)));
+document.querySelector('button').addEventListener('click', () => limpaTela());
